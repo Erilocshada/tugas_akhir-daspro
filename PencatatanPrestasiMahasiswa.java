@@ -1,31 +1,29 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-
-class Prestasi {
-    String namaMahasiswa;
-    String nimMahasiswa;
+class DataPrestasi {
+    String nama; // Atribut kelas
+    String nim;
     String jenisPrestasi;
     String tingkatPrestasi;
-    int tahunPrestasi;
+    int tahun;
 
-    public Prestasi(String nama, String nim, String jenis, String tingkat, int tahun) {
-        this.namaMahasiswa = nama;
-        this.nimMahasiswa = nim;
-        this.jenisPrestasi = jenis;
-        this.tingkatPrestasi = tingkat;
-        this.tahunPrestasi = tahun;
+    // Constructor tanpa `this`
+    DataPrestasi(String namaMahasiswa, String nimMahasiswa, String jenis, String tingkat, int tahunPrestasi) {
+        nama = namaMahasiswa; // Nama parameter berbeda dari nama atribut
+        nim = nimMahasiswa;
+        jenisPrestasi = jenis;
+        tingkatPrestasi = tingkat;
+        tahun = tahunPrestasi;
     }
 
-    public String toString() {
-        return "Nama: " + namaMahasiswa + " | NIM: " + nimMahasiswa +
-               " | Jenis: " + jenisPrestasi + " | Tingkat: " + tingkatPrestasi +
-               " | Tahun: " + tahunPrestasi;
+    // Metode untuk menampilkan data prestasi
+    String tampilkanPrestasi() {
+        return "Nama: " + nama + " | NIM: " + nim + " | Jenis: " + jenisPrestasi +
+               " | Tingkat: " + tingkatPrestasi + " | Tahun: " + tahun;
     }
 }
 
 public class PencatatanPrestasiMahasiswa {
-    static ArrayList<Prestasi> daftarPrestasi = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
+    static ArrayList<DataPrestasi> daftarPrestasi = new ArrayList<>();
 
     public static void main(String[] args) {
         int pilihan;
@@ -33,17 +31,17 @@ public class PencatatanPrestasiMahasiswa {
             tampilkanMenu();
             System.out.print("Pilih menu: ");
             pilihan = scanner.nextInt();
-            scanner.nextLine(); // Membaca newline setelah input angka
+            scanner.nextLine(); // Membaca newline setelah angka
 
             switch (pilihan) {
                 case 1:
-                    tambahDataPrestasi();
+                    tambahPrestasi();
                     break;
                 case 2:
                     tampilkanSemuaPrestasi();
                     break;
                 case 3:
-                    analisisPrestasiBerdasarkanJenis();
+                    analisisPrestasi();
                     break;
                 case 4:
                     System.out.println("Keluar dari program. Terima kasih!");
@@ -55,19 +53,19 @@ public class PencatatanPrestasiMahasiswa {
     }
 
     static void tampilkanMenu() {
-        System.out.println("=== PENCATATAN PRESTASI MAHASISWA ===");
+        System.out.println("\n=== PENCATATAN PRESTASI MAHASISWA ===");
         System.out.println("1. Tambah Data Prestasi");
         System.out.println("2. Tampilkan Semua Prestasi");
         System.out.println("3. Analisis Prestasi Berdasarkan Jenis");
         System.out.println("4. Keluar");
     }
 
-    static void tambahDataPrestasi() {
+    static void tambahPrestasi() {
         System.out.print("Masukkan Nama Mahasiswa: ");
-        String nama = scanner.nextLine();
+        String namaMahasiswa = scanner.nextLine();
 
         System.out.print("Masukkan NIM Mahasiswa: ");
-        String nim = scanner.nextLine();
+        String nimMahasiswa = scanner.nextLine();
 
         System.out.print("Masukkan Jenis Prestasi (Juara 1 / Juara 2 / Juara 3): ");
         String jenis = scanner.nextLine();
@@ -75,17 +73,19 @@ public class PencatatanPrestasiMahasiswa {
         System.out.print("Masukkan Tingkat Prestasi (Lokal / Nasional / Internasional): ");
         String tingkat = scanner.nextLine();
 
-        int tahun;
+        int tahunPrestasi;
         do {
             System.out.print("Masukkan Tahun Prestasi (2010 - 2024): ");
-            tahun = scanner.nextInt();
-            scanner.nextLine(); // Membaca newline setelah input angka
-            if (tahun < 2010 || tahun > 2024) {
+            tahunPrestasi = scanner.nextInt();
+            scanner.nextLine(); // Membaca newline setelah angka
+            if (tahunPrestasi < 2010 || tahunPrestasi > 2024) {
                 System.out.println("Tahun tidak valid. Coba lagi.");
             }
-        } while (tahun < 2010 || tahun > 2024);
+        } while (tahunPrestasi < 2010 || tahunPrestasi > 2024);
 
-        daftarPrestasi.add(new Prestasi(nama, nim, jenis, tingkat, tahun));
+        // Membuat objek baru dengan parameter yang berbeda
+        DataPrestasi prestasiBaru = new DataPrestasi(namaMahasiswa, nimMahasiswa, jenis, tingkat, tahunPrestasi);
+        daftarPrestasi.add(prestasiBaru);
         System.out.println("Data prestasi berhasil ditambahkan.");
     }
 
@@ -93,34 +93,30 @@ public class PencatatanPrestasiMahasiswa {
         if (daftarPrestasi.isEmpty()) {
             System.out.println("Belum ada data prestasi.");
         } else {
-            System.out.println("=== DAFTAR SEMUA PRESTASI ===");
-            for (Prestasi p : daftarPrestasi) {
-                System.out.println(p);
+            System.out.println("\n=== DAFTAR SEMUA PRESTASI ===");
+            for (DataPrestasi prestasi : daftarPrestasi) {
+                System.out.println(prestasi.tampilkanPrestasi());
             }
         }
     }
 
-    static void analisisPrestasiBerdasarkanJenis() {
+    static void analisisPrestasi() {
         if (daftarPrestasi.isEmpty()) {
             System.out.println("Belum ada data prestasi untuk dianalisis.");
         } else {
             int juara1 = 0, juara2 = 0, juara3 = 0;
 
-            for (Prestasi p : daftarPrestasi) {
-                switch (p.jenisPrestasi) {
-                    case "Juara 1":
-                        juara1++;
-                        break;
-                    case "Juara 2":
-                        juara2++;
-                        break;
-                    case "Juara 3":
-                        juara3++;
-                        break;
+            for (DataPrestasi prestasi : daftarPrestasi) {
+                if (prestasi.jenisPrestasi.equalsIgnoreCase("Juara 1")) {
+                    juara1++;
+                } else if (prestasi.jenisPrestasi.equalsIgnoreCase("Juara 2")) {
+                    juara2++;
+                } else if (prestasi.jenisPrestasi.equalsIgnoreCase("Juara 3")) {
+                    juara3++;
                 }
             }
 
-            System.out.println("=== ANALISIS PRESTASI BERDASARKAN JENIS ===");
+            System.out.println("\n=== ANALISIS PRESTASI BERDASARKAN JENIS ===");
             System.out.println("Juara 1: " + juara1);
             System.out.println("Juara 2: " + juara2);
             System.out.println("Juara 3: " + juara3);
